@@ -9,6 +9,11 @@ const pool = new Pool(); // .env used
 
 app.use(express.json());
 
+// Get route
+app.get("/", (req, res) => {
+  res.send("🎉 API is up and running on Render!");
+});
+
 // Signup route
 app.post('/signup', async (req, res) => {
   const { email, password } = req.body;
