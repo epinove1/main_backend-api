@@ -18,8 +18,14 @@ app.get("/", (req, res) => {
 app.post('/signup', async (req, res) => {
   const { email, password } = req.body;
   const hash = await bcrypt.hash(password, 10);
-  await pool.query('INSERT INTO users (email, password) VALUES ($1, $2)', [email, hash]);
-  console.log("Signup hit!", req.body);
+
+  await pool.query(
+    'INSERT INTO users (email, password) VALUES ($1, $2)',
+    [email, hash]
+  );
+
+  console.log("Signup hit!", req.body); // ✅ Logging input
+
   res.send('User created');
 });
 
