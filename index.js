@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require("cors");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { Pool } = require('pg');
@@ -7,6 +8,7 @@ require('dotenv').config();
 const app = express();
 const pool = new Pool(); // .env used
 
+app.use(cors());
 app.use(express.json());
 
 // Get route
