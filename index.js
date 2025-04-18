@@ -18,6 +18,8 @@ app.get("/", (req, res) => {
 
 // Signup route
 app.post('/signup', async (req, res) => {
+  console.log("Received headers:", req.headers);
+  console.log("Raw body:", req.body);
   const { email, password } = req.body;
   const hash = await bcrypt.hash(password, 10);
 
