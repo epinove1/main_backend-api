@@ -27,8 +27,8 @@ app.post('/signup', async (req, res) => {
   }
 
     await pool.query(
-      "INSERT INTO dxusers (us1_firstname, us1_lastname, us1_email, us1_password, us1_accountstatus) VALUES ($1, $2, $3, $4, $5, 'Requested')",
-      [email, hash]
+      "INSERT INTO dxusers (us1_firstname, us1_lastname, us1_email, us1_password, us1_requestDescription,us1_accountstatus) VALUES ($1, $2, $3, $4, $5, 'Requested')",
+      [firstName, lastName, email, hash, requestDescription]
     );
 
     console.log('✅ User created:', email);
