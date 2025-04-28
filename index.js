@@ -22,7 +22,7 @@ app.post('/signup', async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     await pool.query(
-      'INSERT INTO users (email, password) VALUES ($1, $2)',
+      'INSERT INTO dxusers (us1_email, us1_password) VALUES ($1, $2)',
       [email, hash]
     );
 
@@ -37,14 +37,14 @@ app.post('/signup', async (req, res) => {
 // Login route
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+  const result = await pool.query('SELECT * FROM dxusers WHERE us1_email = $1', [email]);
   const user = result.rows[0];
   if (!user) return res.status(401).send('User not found');
 
-  const valid = await bcrypt.compare(password, user.password);
+  const valid = await bcrypt.compare(password, user.us1_password);
   if (!valid) return res.status(401).send('Invalid password');
 
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: user.us1_id }, process.env.JWT_SECRET);
   res.json({ token });
 });
 
