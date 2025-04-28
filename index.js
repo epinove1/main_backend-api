@@ -18,11 +18,16 @@ app.get("/", (req, res) => {
 
 app.post('/signup', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { firstName, lastName, email, password, requestDescription } = req.body;
     const hash = await bcrypt.hash(password, 10);
 
+      // --- 🛡️ VALIDATE FIELDS HERE ---
+  if (!firstName || !lastName || !email || !password || !requestDescription) {
+    return res.status(400).send('First name, last name, email, and password are required');
+  }
+
     await pool.query(
-      'INSERT INTO dxusers (us1_email, us1_password) VALUES ($1, $2)',
+      "INSERT INTO dxusers (us1_firstname, us1_lastname, us1_email, us1_password, us1_accountstatus) VALUES ($1, $2, $3, $4, $5, 'Requested')",
       [email, hash]
     );
 
@@ -37,7 +42,7 @@ app.post('/signup', async (req, res) => {
 // Login route
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  const result = await pool.query('SELECT * FROM dxusers WHERE us1_email = $1', [email]);
+  const result = await pool.query("SELECT * FROM dxusers WHERE us1_email = $1 AND us1_accountstatus = 'Active'", [email]);
   const user = result.rows[0];
   if (!user) return res.status(401).send('User not found');
 
